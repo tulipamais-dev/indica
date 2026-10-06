@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Especial Tulipa+ · Me indica um profissional?</title>
+<meta name="description" content="Indique um profissional que fez diferença na vida de quem convive com a Doença de Parkinson. Especial Tulipa+.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 62V34' stroke='%233F6B2B' stroke-width='5' fill='none'/%3E%3Cpath d='M18 8c0 20 6 30 14 30s14-10 14-30c-4 6-8 8-14 4-6 4-10 2-14-4z' fill='%23C1121F'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --creme: #FFF8EC;
+    --creme-2: #FFEFD2;
+    --ambar: #E39A2D;
+    --ambar-escuro: #8A3F05;
+    --tulipa: #C1121F;
+    --verde: #3F6B2B;
+    --texto: #2A1A0B;
+    --texto-suave: #5A4630;
+    --borda: #8B6B3E;
+    --foco: #0B3D91;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 112.5%; } /* 18 px base, respeita o zoom do aparelho */
+  body {
+    margin: 0;
+    background: var(--creme);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+  }
+  [hidden] { display: none !important; }
+  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height: 1.25; margin: 0 0 .6em; }
+  h1 { font-size: clamp(1.75rem, 7vw, 2.4rem); }
+  h2 { font-size: clamp(1.5rem, 5.5vw, 1.9rem); }
+  h2:focus, h1:focus { outline: none; }
+  h2 label { display: block; cursor: pointer; }
+  h3 { font-size: 1.2rem; margin-top: 1.4em; margin-bottom: .3em; }
+  p { margin: 0 0 1em; }
+  a { color: var(--ambar-escuro); font-weight: 600; text-underline-offset: 3px; }
+
+  :focus-visible { outline: 4px solid var(--foco); outline-offset: 3px; }
+
+  .pular { position: absolute; left: -999px; top: 0; background: #fff; padding: 12px 16px; z-index: 10; }
+  .pular:focus { left: 8px; top: 8px; }
+
+  .topo { background: var(--creme-2); border-bottom: 4px solid var(--ambar); }
+  .topo-in { max-width: 42rem; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  .marca-nome { font-family: Georgia, serif; font-weight: 700; font-size: 1.35rem; color: var(--ambar-escuro); }
+  .marca-nome b { color: var(--tulipa); }
+
+  main { max-width: 42rem; margin: 0 auto; padding: 20px 20px 40px; }
+
+  .progresso { margin: 4px 0 24px; }
+  .progresso-texto { font-weight: 700; margin: 0 0 8px; color: var(--texto-suave); }
+  .barra { height: 16px; background: #EBD9B8; border: 2px solid var(--borda); border-radius: 99px; overflow: hidden; }
+  .barra > div { height: 100%; background: var(--ambar-escuro); width: 0; }
+
+  .etiqueta {
+    display: inline-block; font-weight: 700; font-size: 1rem; padding: 2px 12px; border-radius: 99px;
+    margin: 0 0 8px; border: 2px solid var(--ambar-escuro);
+  }
+  .etiqueta.obrig { background: var(--ambar-escuro); color: #fff; }
+  .etiqueta.opc { background: #fff; color: var(--ambar-escuro); }
+  .dica { color: var(--texto-suave); margin: 0 0 18px; }
+
+  /* Cartões grandes clicáveis */
+  .grupo { display: grid; gap: 14px; margin: 0 0 12px; }
+  .cartao {
+    position: relative; display: flex; align-items: center; gap: 16px;
+    min-height: 68px; padding: 14px 18px; background: #fff;
+    border: 2px solid var(--borda); border-radius: 16px; cursor: pointer;
+    line-height: 1.35;
+  }
+  .cartao input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .cartao:focus-within { outline: 4px solid var(--foco); outline-offset: 3px; }
+  .marca { flex: none; width: 32px; height: 32px; border: 3px solid var(--borda); border-radius: 50%; background: #fff; display: grid; place-items: center; }
+  .cartao.caixa .marca { border-radius: 8px; }
+  .cartao.marcado { background: var(--creme-2); border-color: var(--ambar-escuro); box-shadow: 0 0 0 2px var(--ambar-escuro); }
+  .cartao.marcado .marca { background: var(--tulipa); border-color: var(--tulipa); }
+  .cartao.marcado .marca::after {
+    content: ""; width: 8px; height: 15px; border: solid #fff; border-width: 0 4px 4px 0;
+    transform: rotate(45deg) translate(-1px, -2px);
+  }
+  .rot-c { display: block; font-weight: 600; }
+  .desc { display: block; color: var(--texto-suave); font-size: 1rem; margin-top: 2px; }
+
+  /* Campos */
+  .campo { margin: 0 0 18px; }
+  .campo > label { display: block; font-weight: 700; margin-bottom: 8px; }
+  input[type=text], select, textarea {
+    display: block; width: 100%; min-height: 58px; padding: 12px 16px;
+    font: inherit; font-size: 1.125rem; color: var(--texto); background: #fff;
+    border: 2px solid var(--borda); border-radius: 14px;
+  }
+  textarea { min-height: 200px; resize: none; line-height: 1.5; }
+  select { min-height: 62px; }
+  [aria-invalid=true] { border-color: #B3261E; border-width: 3px; }
+  .contador { color: var(--texto-suave); margin: 8px 0 0; }
+  .citacao { background: #fff; border-left: 6px solid var(--tulipa); border-radius: 8px; padding: 12px 16px; margin: 0 0 20px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  /* Botões */
+  .acoes { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; margin-top: 28px; }
+  .acoes.um { grid-template-columns: 1fr; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; text-align: center;
+    min-height: 60px; padding: 12px 20px; font: inherit; font-size: 1.125rem; font-weight: 700;
+    border-radius: 14px; border: 3px solid var(--ambar-escuro); cursor: pointer; text-decoration: none;
+  }
+  .btn.principal { background: var(--ambar-escuro); color: #fff; }
+  .btn.sec { background: #fff; color: var(--ambar-escuro); }
+  .btn[disabled] { opacity: .65; cursor: progress; }
+  .btn-link {
+    background: none; border: 0; padding: 8px 0; min-height: 48px; font: inherit; font-weight: 700;
+    color: var(--ambar-escuro); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-align: left;
+  }
+
+  .erro { margin: 0; }
+  .erro.visivel {
+    margin: 18px 0 0; padding: 14px 16px; background: #FDECEA; border: 3px solid #B3261E;
+    border-radius: 14px; color: #6E0B05; font-weight: 600;
+  }
+  .aviso { background: #fff; border: 2px solid var(--ambar); border-radius: 16px; padding: 16px 18px; margin: 0 0 20px; }
+  .aviso p:last-child { margin-bottom: 0; }
+
+  .heroi { text-align: left; }
+  .heroi svg { display: block; margin: 8px 0 16px; }
+  .destaque { font-weight: 700; }
+
+  .rodape { max-width: 42rem; margin: 0 auto; padding: 8px 20px 40px; color: var(--texto-suave); }
+
+  /* Armadilha anti-robô: fora da tela, nunca visível */
+  .isca { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+  /* Aviso de privacidade */
+  dialog {
+    width: min(42rem, calc(100% - 24px)); max-height: calc(100% - 24px); padding: 0;
+    border: 4px solid var(--ambar-escuro); border-radius: 18px; background: var(--creme); color: var(--texto);
+  }
+  dialog::backdrop { background: rgba(42, 26, 11, .65); }
+  .dlg-in { padding: 20px; max-height: calc(100vh - 48px); overflow-y: auto; }
+  .dlg-in ul { padding-left: 1.2em; margin: 0 0 1em; }
+  .dlg-in li { margin-bottom: .5em; }
+
+  @media (max-width: 380px) {
+    .acoes { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topo">
+  <div class="topo-in">
+    <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path d="M32 62V34" stroke="#3F6B2B" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M32 56C20 54 13 46 13 36c10 2 17 8 19 20z" fill="#3F6B2B"/>
+      <path d="M18 8c0 20 6 30 14 30s14-10 14-30c-4 6-8 8-14 4-6 4-10 2-14-4z" fill="#C1121F"/>
+    </svg>
+    <span class="marca-nome">Tulipa<b>+</b></span>
+  </div>
+</header>
+
+<main id="conteudo">
+  <div class="progresso" id="progresso" hidden>
+    <p class="progresso-texto" id="progresso-texto"></p>
+    <div class="barra" role="progressbar" aria-label="Andamento do formulário" aria-valuemin="0" aria-valuemax="11" aria-valuenow="0" id="barra"><div id="barra-in"></div></div>
+  </div>
+  <div id="tela"></div>
+  <noscript><p class="aviso">Este formulário precisa de JavaScript ligado no navegador para funcionar.</p></noscript>
+</main>
+
+<footer class="rodape">
+  <button type="button" class="btn-link" id="abrir-privacidade-rodape">Aviso de privacidade</button>
+  <p>Esta página não usa rastreamento nem anúncios.</p>
+</footer>
+
+<!-- Campo invisível anti-robô. Pessoas não veem nem preenchem. -->
+<div class="isca" aria-hidden="true">
+  <label>Deixe este campo vazio <input type="text" name="campo_extra" id="campo_extra" tabindex="-1" autocomplete="off"></label>
+</div>
+
+<dialog id="privacidade" aria-labelledby="priv-titulo">
+  <div class="dlg-in">
+    <h2 id="priv-titulo" tabindex="-1">Aviso de privacidade</h2>
+    <p>Este aviso explica, em poucas palavras, o que acontece com as informações que você preenche aqui, conforme a Lei Geral de Proteção de Dados (LGPD).</p>
+
+    <h3>Quem cuida dos dados</h3>
+    <p>A Tulipa+ (@tulipamais), uma página sobre a Doença de Parkinson. Contato para qualquer assunto de privacidade: <a href="mailto:tulipamais@gmail.com">tulipamais@gmail.com</a>.</p>
+
+    <h3>Quais dados coletamos</h3>
+    <ul>
+      <li>Se você é pessoa com Parkinson ou cuidador(a) ou familiar.</li>
+      <li>Sobre o profissional indicado: nome, especialidade, número de registro (se você souber), estado, cidade, tipo de atendimento e se atende online.</li>
+      <li>O seu relato sobre o que fez diferença e se você autoriza publicar a frase.</li>
+      <li>Seu e-mail ou @, somente se você quiser informar.</li>
+    </ul>
+
+    <h3>Para que usamos</h3>
+    <p>Para organizar o guia do Especial Tulipa+, conferir o registro do profissional e, se for preciso, falar com você para confirmar alguma informação. Não usamos para outra finalidade, não vendemos e não compartilhamos com empresas de publicidade.</p>
+
+    <h3>O que pode ser publicado</h3>
+    <p>Podemos publicar o nome do profissional, a especialidade, a cidade e o estado. A sua frase só será publicada se você autorizar, e nunca com o seu nome. <span class="destaque">Seu contato (e-mail ou @) nunca é publicado.</span></p>
+
+    <h3>Um cuidado importante</h3>
+    <p>Ao dizer que você é pessoa com Parkinson, ou cuidador(a) de alguém com Parkinson, sua resposta pode revelar um dado de saúde, que a LGPD considera dado pessoal sensível. Por isso tratamos tudo com cuidado, usamos só para esta finalidade e baseamos o tratamento no seu consentimento, que você pode retirar quando quiser. Evite escrever, no relato, o seu nome ou dados de saúde de outras pessoas.</p>
+
+    <h3>Onde ficam guardados</h3>
+    <p>Em uma planilha do Google, de acesso restrito à equipe da Tulipa+. Os dados ficam guardados enquanto o guia existir ou até você pedir a exclusão. O rascunho que o formulário salva enquanto você preenche fica somente no seu aparelho e é apagado quando você envia.</p>
+
+    <h3>Seus direitos</h3>
+    <p>Você pode pedir para ver, corrigir ou excluir o que enviou, ou retirar o seu consentimento. O profissional indicado também pode pedir correção ou exclusão dos dados dele. Escreva para <a href="mailto:tulipamais@gmail.com">tulipamais@gmail.com</a> contando o nome do profissional que você indicou e o contato que informou. Se você não deixou contato, descreva o que escreveu, para conseguirmos localizar.</p>
+
+    <h3>Rastreamento</h3>
+    <p>Esta página não usa cookies de rastreamento, nem ferramentas de estatística, nem anúncios.</p>
+
+    <div class="acoes um"><button type="button" class="btn principal" id="fechar-privacidade">Fechar</button></div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ===== Configuração: cole aqui a URL do Apps Script (termina em /exec) ===== */
+  var ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbxGq1FfVpratQvN6hFfTfSyyzH6Ss7u9nJZej-m07VoY1dWPdHTyzMSctT4F7znKDCY/exec';
+
+  var CHAVE_RASCUNHO = 'tulipa_indica_rascunho_v1';
+  var CHAVE_CID = 'tulipa_indica_cid';
+  var INSTAGRAM_URL = 'https://www.instagram.com/tulipamais/';
+  var PERFIL_PROF = 'Profissional de saúde';
+  var MIN_RELATO = 20;
+  var MAX_RELATO = 1500;
+
+  var PERFIS = ['Pessoa com Parkinson', 'Cuidador(a) ou familiar', PERFIL_PROF];
+  var ESPECIALIDADES = ['Neurologista', 'Fisioterapeuta', 'Fonoaudiólogo(a)', 'Terapeuta ocupacional',
+    'Psicólogo(a)', 'Nutricionista', 'Educador(a) físico(a)', 'Outra'];
+  var CONSELHO = { 'Neurologista': 'CRM', 'Fisioterapeuta': 'CREFITO', 'Fonoaudiólogo(a)': 'CREFONO',
+    'Terapeuta ocupacional': 'CREFITO', 'Psicólogo(a)': 'CRP', 'Nutricionista': 'CRN', 'Educador(a) físico(a)': 'CREF' };
+  var ATENDIMENTOS = ['SUS', 'Plano de saúde', 'Particular', 'Não sei'];
+  var ONLINE = ['Sim', 'Não', 'Não sei'];
+  var ESTADOS = [['AC', 'Acre'], ['AL', 'Alagoas'], ['AP', 'Amapá'], ['AM', 'Amazonas'], ['BA', 'Bahia'],
+    ['CE', 'Ceará'], ['DF', 'Distrito Federal'], ['ES', 'Espírito Santo'], ['GO', 'Goiás'], ['MA', 'Maranhão'],
+    ['MT', 'Mato Grosso'], ['MS', 'Mato Grosso do Sul'], ['MG', 'Minas Gerais'], ['PA', 'Pará'], ['PB', 'Paraíba'],
+    ['PR', 'Paraná'], ['PE', 'Pernambuco'], ['PI', 'Piauí'], ['RJ', 'Rio de Janeiro'], ['RN', 'Rio Grande do Norte'],
+    ['RS', 'Rio Grande do Sul'], ['RO', 'Rondônia'], ['RR', 'Roraima'], ['SC', 'Santa Catarina'], ['SP', 'São Paulo'],
+    ['SE', 'Sergipe'], ['TO', 'Tocantins']];
+
+  var PASSOS = ['perfil', 'nome', 'esp', 'registro', 'local', 'atend', 'online', 'relato', 'publicar', 'contato', 'consent'];
+
+  var MSG_REDE = 'Não conseguimos enviar agora. Confira a internet e toque em Enviar de novo. Suas respostas continuam salvas neste aparelho.';
+  var MSG_INESPERADA = 'O envio não foi confirmado. Suas respostas continuam salvas neste aparelho. Toque em Enviar de novo em alguns instantes.';
+  var MSG_NAO_CONFIGURADO = 'Este formulário ainda não foi conectado à planilha. Avise a equipe da Tulipa+. Suas respostas continuam salvas neste aparelho.';
+
+  var area = document.getElementById('tela');
+  var estado = vazio();
+  var tela = 'intro';
+  var enviando = false;
+  var jaEnviou = false;
+  var rascunhoSalvo = null;
+
+  /* ===== Utilidades ===== */
+  function vazio() {
+    return { perfil: '', nome: '', esp: '', espOutra: '', registro: '', uf: '', cidade: '',
+      atend: [], online: '', relato: '', publicar: '', contato: '', consent: false };
+  }
+
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    var k;
+    attrs = attrs || {};
+    for (k in attrs) {
+      if (!Object.prototype.hasOwnProperty.call(attrs, k)) continue;
+      var v = attrs[k];
+      if (v === false || v === null || v === undefined) continue;
+      if (k === 'class') n.className = v;
+      else if (k === 'text') n.textContent = v;
+      else if (v === true) n.setAttribute(k, '');
+      else n.setAttribute(k, v);
+    }
+    (kids || []).forEach(function (c) {
+      if (c === null || c === undefined) return;
+      n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return n;
+  }
+
+  function limparNo(no) { while (no.firstChild) no.removeChild(no.firstChild); }
+  function aparado(s) { return (s || '').replace(/^\s+|\s+$/g, ''); }
+
+  /* ===== Rascunho (localStorage, sempre com try/catch) ===== */
+  function temConteudo(e) {
+    return !!(e.perfil || e.nome || e.esp || e.registro || e.relato || e.contato || e.atend.length || e.online || e.publicar);
+  }
+
+  function salvarRascunho() {
+    try {
+      if (PASSOS.indexOf(tela) === -1) return;
+      var copia = JSON.parse(JSON.stringify(estado));
+      copia.consent = false;                       // o consentimento precisa ser dado de novo
+      if (copia.perfil === PERFIL_PROF) copia.perfil = '';
+      if (!temConteudo(copia)) return;
+      localStorage.setItem(CHAVE_RASCUNHO, JSON.stringify({ v: 1, tela: tela, estado: copia }));
+    } catch (e) { /* sem armazenamento: tudo bem, o formulário continua funcionando */ }
+  }
+
+  function lerRascunho() {
+    try {
+      var bruto = localStorage.getItem(CHAVE_RASCUNHO);
+      if (!bruto) return null;
+      var r = JSON.parse(bruto);
+      if (!r || r.v !== 1 || !r.estado || PASSOS.indexOf(r.tela) === -1) return null;
+      var e = vazio();
+      ['perfil', 'nome', 'esp', 'espOutra', 'registro', 'uf', 'cidade', 'online', 'relato', 'publicar', 'contato']
+        .forEach(function (k) { if (typeof r.estado[k] === 'string') e[k] = r.estado[k].slice(0, 2000); });
+      if (Array.isArray(r.estado.atend)) {
+        e.atend = r.estado.atend.filter(function (a) { return ATENDIMENTOS.indexOf(a) !== -1; });
+      }
+      if (!temConteudo(e)) return null;
+      return { tela: r.tela, estado: e };
+    } catch (e) { return null; }
+  }
+
+  function apagarRascunho() {
+    try { localStorage.removeItem(CHAVE_RASCUNHO); } catch (e) { /* ignora */ }
+  }
+
+  function idDoAparelho() {
+    var id = '';
+    try { id = localStorage.getItem(CHAVE_CID) || ''; } catch (e) { /* ignora */ }
+    if (!id) {
+      try {
+        var b = new Uint8Array(12);
+        (window.crypto || window.msCrypto).getRandomValues(b);
+        id = Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+      } catch (e) {
+        id = 'a' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      }
+      try { localStorage.setItem(CHAVE_CID, id); } catch (e) { /* ignora */ }
+    }
+    return id;
+  }
+
+  /* ===== Componentes ===== */
+  function cartoes(cfg) {
+    // cfg: nome, tipo ('radio' | 'checkbox'), itens [{valor, rotulo, desc}], marcados [valores], aoMudar(lista)
+    var caixa = cfg.tipo === 'checkbox';
+    var grupo = el('div', {
+      class: 'grupo', role: caixa ? 'group' : 'radiogroup',
+      'aria-labelledby': 'titulo', 'aria-describedby': 'dica erro', id: cfg.id
+    });
+    cfg.itens.forEach(function (it, i) {
+      var input = el('input', { type: cfg.tipo, name: cfg.nome, value: it.valor, id: cfg.nome + '-' + i });
+      if (cfg.marcados.indexOf(it.valor) !== -1) input.checked = true;
+      var rot = el('span', { class: 'texto' }, [el('span', { class: 'rot-c', text: it.rotulo || it.valor })]);
+      if (it.desc) rot.appendChild(el('span', { class: 'desc', text: it.desc }));
+      var cartao = el('label', { class: 'cartao' + (caixa ? ' caixa' : '') }, [input, el('span', { class: 'marca', 'aria-hidden': 'true' }), rot]);
+      if (input.checked) cartao.className += ' marcado';
+      input.addEventListener('change', function () {
+        var entradas = grupo.querySelectorAll('input');
+        var lista = [];
+        Array.prototype.forEach.call(entradas, function (x) {
+          if (caixa && x !== input && input.checked) {
+            // "Não sei" não combina com as outras opções, e vice-versa
+            var exclusivo = (input.value === 'Não sei') || (x.value === 'Não sei');
+            if (exclusivo) x.checked = false;
+          }
+        });
+        Array.prototype.forEach.call(entradas, function (x) {
+          x.parentNode.className = 'cartao' + (caixa ? ' caixa' : '') + (x.checked ? ' marcado' : '');
+          if (x.checked) lista.push(x.value);
+        });
+        cfg.aoMudar(lista);
+        salvarRascunho();
+      });
+      grupo.appendChild(cartao);
+    });
+    return grupo;
+  }
+
+  function campoTexto(cfg) {
+    // cfg: id, valor, max, aoDigitar
+    var input = el('input', { type: 'text', id: cfg.id, maxlength: cfg.max || 200, autocomplete: cfg.auto || 'off',
+      'aria-describedby': 'dica erro', inputmode: cfg.modo || false, autocapitalize: cfg.cap || false, spellcheck: 'false' });
+    input.value = cfg.valor || '';
+    input.addEventListener('input', function () { input.removeAttribute('aria-invalid'); cfg.aoDigitar(input.value); salvarRascunho(); });
+    return input;
+  }
+
+  function moldura(id, def) {
+    // Monta o "quadro" padrão de uma pergunta: título, etiqueta, dica, corpo, erro e botões.
+    var form = el('form', { class: 'passo', novalidate: true, 'data-passo': id });
+    var h2 = el('h2', { id: 'titulo', tabindex: '-1', 'data-foco': '1' });
+    if (def.rotuloPara) h2.appendChild(el('label', { for: def.rotuloPara, text: def.titulo }));
+    else h2.textContent = def.titulo;
+    form.appendChild(h2);
+    form.appendChild(el('span', { class: 'etiqueta ' + (def.obrigatoria ? 'obrig' : 'opc'), text: def.obrigatoria ? 'Obrigatória' : 'Opcional' }));
+    form.appendChild(el('p', { class: 'dica', id: 'dica', text: (typeof def.dica === 'function' ? def.dica() : def.dica) || '' }));
+    def.corpo(form).forEach(function (n) { if (n) form.appendChild(n); });
+    form.appendChild(el('p', { class: 'erro', id: 'erro', role: 'alert' }));
+    var voltar = el('button', { type: 'button', class: 'btn sec', id: 'voltar', text: 'Voltar' });
+    var seguir = el('button', { type: 'submit', class: 'btn principal', id: 'seguir', text: def.botao || 'Continuar' });
+    form.appendChild(el('div', { class: 'acoes' }, [voltar, seguir]));
+
+    voltar.addEventListener('click', function () { mostrar(anterior(id)); });
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (enviando) return;
+      var problema = def.validar ? def.validar() : null;
+      if (problema) { mostrarErro(form, problema.msg, problema.alvo); return; }
+      limparErro(form);
+      if (def.aoSeguir) def.aoSeguir(form);
+      else mostrar(def.seguinte ? def.seguinte() : proximo(id));
+    });
+    return form;
+  }
+
+  function mostrarErro(form, msg, alvoSeletor) {
+    var caixa = form.querySelector('#erro');
+    caixa.textContent = 'Atenção: ' + msg;
+    caixa.className = 'erro visivel';
+    var alvo = alvoSeletor ? form.querySelector(alvoSeletor) : null;
+    if (alvo) {
+      if (alvo.tagName !== 'DIV') alvo.setAttribute('aria-invalid', 'true');
+      alvo.focus();
+    }
+  }
+  function limparErro(form) {
+    var caixa = form.querySelector('#erro');
+    if (caixa) { caixa.textContent = ''; caixa.className = 'erro'; }
+    Array.prototype.forEach.call(form.querySelectorAll('[aria-invalid]'), function (n) { n.removeAttribute('aria-invalid'); });
+  }
+
+  function proximo(id) { return PASSOS[PASSOS.indexOf(id) + 1]; }
+  function anterior(id) {
+    if (id === 'pro') return 'perfil';
+    var i = PASSOS.indexOf(id);
+    return i <= 0 ? 'intro' : PASSOS[i - 1];
+  }
+
+  /* ===== Definição das perguntas ===== */
+  var DEFS = {
+    perfil: {
+      titulo: 'Você é:', obrigatoria: true, dica: 'Escolha uma opção.',
+      corpo: function () {
+        return [cartoes({ id: 'g-perfil', nome: 'perfil', tipo: 'radio', marcados: [estado.perfil],
+          itens: PERFIS.map(function (p) { return { valor: p }; }),
+          aoMudar: function (l) { estado.perfil = l[0] || ''; } })];
+      },
+      validar: function () { return estado.perfil ? null : { msg: 'escolha uma opção para continuar.', alvo: '#perfil-0' }; },
+      seguinte: function () { return estado.perfil === PERFIL_PROF ? 'pro' : 'nome'; }
+    },
+    nome: {
+      titulo: 'Nome do profissional', rotuloPara: 'f-nome', obrigatoria: true,
+      dica: 'Escreva como aparece na placa, no site ou na receita.',
+      corpo: function () { return [campoTexto({ id: 'f-nome', valor: estado.nome, max: 120, auto: 'off', aoDigitar: function (v) { estado.nome = v; } })]; },
+      validar: function () { return aparado(estado.nome).length >= 2 ? null : { msg: 'escreva o nome do profissional para continuar.', alvo: '#f-nome' }; }
+    },
+    esp: {
+      titulo: 'Especialidade', obrigatoria: true, dica: 'Escolha uma opção.',
+      corpo: function () {
+        var outraBox = el('div', { class: 'campo', id: 'outra-box' });
+        outraBox.appendChild(el('label', { for: 'f-outra', text: 'Qual especialidade?' }));
+        var campo = campoTexto({ id: 'f-outra', valor: estado.espOutra, max: 60, aoDigitar: function (v) { estado.espOutra = v; } });
+        outraBox.appendChild(campo);
+        outraBox.hidden = estado.esp !== 'Outra';
+        var grupo = cartoes({ id: 'g-esp', nome: 'esp', tipo: 'radio', marcados: [estado.esp],
+          itens: ESPECIALIDADES.map(function (p) { return { valor: p }; }),
+          aoMudar: function (l) { estado.esp = l[0] || ''; outraBox.hidden = estado.esp !== 'Outra'; } });
+        return [grupo, outraBox];
+      },
+      validar: function () {
+        if (!estado.esp) return { msg: 'escolha a especialidade.', alvo: '#esp-0' };
+        if (estado.esp === 'Outra' && aparado(estado.espOutra).length < 2) return { msg: 'escreva qual é a especialidade.', alvo: '#f-outra' };
+        return null;
+      }
+    },
+    registro: {
+      titulo: 'Número do registro no conselho, se souber', rotuloPara: 'f-registro', obrigatoria: false,
+      dica: function () {
+        var c = CONSELHO[estado.esp];
+        return c
+          ? 'É o número do ' + c + '. Pode deixar em branco.'
+          : 'É o número do conselho da profissão (CRM, CREFITO, CRP e outros). Pode deixar em branco.';
+      },
+      corpo: function () {
+        return [campoTexto({ id: 'f-registro', valor: estado.registro, max: 40, aoDigitar: function (v) { estado.registro = v; } })];
+      }
+    },
+    local: {
+      titulo: 'Onde esse profissional atende?', obrigatoria: true, dica: 'Escolha o estado e escreva a cidade.',
+      corpo: function () {
+        var sel = el('select', { id: 'f-uf', name: 'uf', 'aria-describedby': 'dica erro', autocomplete: 'off' });
+        sel.appendChild(el('option', { value: '', text: 'Escolha o estado' }));
+        ESTADOS.forEach(function (e) { sel.appendChild(el('option', { value: e[0], text: e[1] + ' (' + e[0] + ')' })); });
+        sel.value = estado.uf;
+        sel.addEventListener('change', function () { sel.removeAttribute('aria-invalid'); estado.uf = sel.value; salvarRascunho(); });
+        return [
+          el('div', { class: 'campo' }, [el('label', { for: 'f-uf', text: 'Estado' }), sel]),
+          el('div', { class: 'campo' }, [el('label', { for: 'f-cidade', text: 'Cidade' }),
+            campoTexto({ id: 'f-cidade', valor: estado.cidade, max: 80, aoDigitar: function (v) { estado.cidade = v; } })])
+        ];
+      },
+      validar: function () {
+        if (!estado.uf) return { msg: 'escolha o estado.', alvo: '#f-uf' };
+        if (aparado(estado.cidade).length < 2) return { msg: 'escreva a cidade.', alvo: '#f-cidade' };
+        return null;
+      }
+    },
+    atend: {
+      titulo: 'Como é o atendimento?', obrigatoria: false, dica: 'Você pode marcar mais de uma opção.',
+      corpo: function () {
+        return [cartoes({ id: 'g-atend', nome: 'atend', tipo: 'checkbox', marcados: estado.atend,
+          itens: ATENDIMENTOS.map(function (p) { return { valor: p }; }),
+          aoMudar: function (l) { estado.atend = l; } })];
+      }
+    },
+    online: {
+      titulo: 'Atende online?', obrigatoria: false, dica: 'Escolha uma opção.',
+      corpo: function () {
+        return [cartoes({ id: 'g-online', nome: 'online', tipo: 'radio', marcados: [estado.online],
+          itens: ONLINE.map(function (p) { return { valor: p }; }),
+          aoMudar: function (l) { estado.online = l[0] || ''; } })];
+      }
+    },
+    relato: {
+      titulo: 'O que esse profissional faz que fez diferença para você?', rotuloPara: 'f-relato', obrigatoria: true,
+      dica: 'Conte com as suas palavras, em poucas frases. Só aceitamos indicações positivas. Evite escrever o seu nome ou o de outras pessoas.',
+      corpo: function () {
+        var ta = el('textarea', { id: 'f-relato', maxlength: String(MAX_RELATO), 'aria-describedby': 'dica contador erro', autocomplete: 'off' });
+        ta.value = estado.relato;
+        var contador = el('p', { class: 'contador', id: 'contador' });
+        function atualizar() {
+          var n = aparado(estado.relato).length;
+          contador.textContent = n >= MIN_RELATO
+            ? 'Pronto, já dá para continuar. Você pode escrever mais se quiser.'
+            : 'Faltam ' + (MIN_RELATO - n) + ' caracteres para chegar ao mínimo de ' + MIN_RELATO + '.';
+        }
+        ta.addEventListener('input', function () { ta.removeAttribute('aria-invalid'); estado.relato = ta.value; atualizar(); salvarRascunho(); });
+        atualizar();
+        return [ta, contador];
+      },
+      validar: function () {
+        var n = aparado(estado.relato).length;
+        return n >= MIN_RELATO ? null : { msg: 'conte um pouco mais. Faltam ' + (MIN_RELATO - n) + ' caracteres para o mínimo de ' + MIN_RELATO + '.', alvo: '#f-relato' };
+      }
+    },
+    publicar: {
+      titulo: 'Podemos publicar esta frase no guia, sem o seu nome?', obrigatoria: false,
+      dica: 'Se você não responder, não vamos publicar a frase.',
+      corpo: function () {
+        var cit = el('p', { class: 'citacao', text: aparado(estado.relato) });
+        return [cit, cartoes({ id: 'g-publicar', nome: 'publicar', tipo: 'radio', marcados: [estado.publicar],
+          itens: [{ valor: 'Sim', desc: 'A frase pode aparecer no guia, sem o seu nome.' },
+                  { valor: 'Não', desc: 'A frase não será publicada.' }],
+          aoMudar: function (l) { estado.publicar = l[0] || ''; } })];
+      }
+    },
+    contato: {
+      titulo: 'Seu e-mail ou @, caso a gente precise confirmar algo', rotuloPara: 'f-contato', obrigatoria: false,
+      dica: 'Não será publicado. Pode deixar em branco.',
+      corpo: function () { return [campoTexto({ id: 'f-contato', valor: estado.contato, max: 120, auto: 'off', cap: 'none', aoDigitar: function (v) { estado.contato = v; } })]; }
+    },
+    consent: {
+      titulo: 'Para terminar', obrigatoria: true, dica: 'Para enviar, marque a caixa abaixo.', botao: 'Enviar indicação',
+      corpo: function () {
+        var input = el('input', { type: 'checkbox', id: 'f-consent', name: 'consent', 'aria-describedby': 'dica erro' });
+        input.checked = !!estado.consent;
+        var cartao = el('label', { class: 'cartao caixa' + (input.checked ? ' marcado' : '') }, [
+          input, el('span', { class: 'marca', 'aria-hidden': 'true' }),
+          el('span', { class: 'texto' }, [el('span', { class: 'rot-c', text: 'Concordo que a Tulipa+ use estas informações para organizar o guia, conforme o aviso de privacidade.' })])
+        ]);
+        input.addEventListener('change', function () {
+          estado.consent = input.checked; input.removeAttribute('aria-invalid');
+          cartao.className = 'cartao caixa' + (input.checked ? ' marcado' : '');
+        });
+        var ler = el('button', { type: 'button', class: 'btn-link', id: 'ler-aviso', text: 'Ler o aviso de privacidade' });
+        ler.addEventListener('click', function () { abrirPrivacidade(ler); });
+        return [el('div', { class: 'grupo' }, [cartao]), ler];
+      },
+      validar: function () { return estado.consent ? null : { msg: 'para enviar, precisamos que você marque que concorda.', alvo: '#f-consent' }; },
+      aoSeguir: function (form) { enviar(form); }
+    }
+  };
+
+  /* ===== Telas especiais ===== */
+  function telaIntro() {
+    var wrap = el('div', { class: 'heroi' });
+    var flor = el('div', { 'aria-hidden': 'true' });
+    flor.innerHTML = '<svg width="72" height="72" viewBox="0 0 64 64" focusable="false"><path d="M32 62V34" stroke="#3F6B2B" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M32 56C20 54 13 46 13 36c10 2 17 8 19 20z" fill="#3F6B2B"/><path d="M18 8c0 20 6 30 14 30s14-10 14-30c-4 6-8 8-14 4-6 4-10 2-14-4z" fill="#C1121F"/></svg>';
+    wrap.appendChild(flor);
+    var h1 = el('h1', { id: 'titulo', tabindex: '-1', 'data-foco': '1', text: 'Especial Tulipa+ · Me indica um profissional?' });
+    wrap.appendChild(h1);
+    wrap.appendChild(el('p', { text: 'Este especial reúne profissionais indicados por pessoas que vivem com Parkinson e por quem cuida.' }));
+    wrap.appendChild(el('p', { text: 'A Tulipa+ não avalia nem recomenda profissionais. Só aceitamos indicações positivas. Seus dados pessoais não serão publicados.' }));
+    wrap.appendChild(el('p', { text: 'Leva poucos minutos e não tem limite de tempo. O que você escrever fica salvo neste aparelho até enviar.' }));
+    var lerBtn = el('button', { type: 'button', class: 'btn-link', text: 'Ler o aviso de privacidade' });
+    lerBtn.addEventListener('click', function () { abrirPrivacidade(lerBtn); });
+
+    var acoes = el('div', { class: 'acoes um' });
+    if (rascunhoSalvo) {
+      wrap.appendChild(el('div', { class: 'aviso', role: 'note' }, [el('p', { text: 'Encontramos um rascunho salvo neste aparelho. Você pode continuar de onde parou.' })]));
+      var cont = el('button', { type: 'button', class: 'btn principal', id: 'continuar-rascunho', text: 'Continuar de onde parei' });
+      cont.addEventListener('click', function () {
+        estado = rascunhoSalvo.estado; var t = rascunhoSalvo.tela; rascunhoSalvo = null; mostrar(t);
+      });
+      var zero = el('button', { type: 'button', class: 'btn sec', id: 'comecar-zero', text: 'Começar do zero' });
+      zero.addEventListener('click', function () {
+        if (window.confirm('Apagar o rascunho salvo e começar do zero?')) {
+          apagarRascunho(); rascunhoSalvo = null; estado = vazio(); mostrar('perfil');
+        }
+      });
+      acoes.appendChild(cont); acoes.appendChild(zero);
+    } else {
+      var ini = el('button', { type: 'button', class: 'btn principal', id: 'comecar', text: 'Começar' });
+      ini.addEventListener('click', function () { mostrar('perfil'); });
+      acoes.appendChild(ini);
+    }
+    wrap.appendChild(acoes);
+    wrap.appendChild(el('div', { style: 'margin-top:12px' }, [lerBtn]));
+    return wrap;
+  }
+
+  function linkInstagram() {
+    return el('a', { class: 'btn sec', href: INSTAGRAM_URL, target: '_blank', rel: 'noopener noreferrer', text: 'Seguir @tulipamais no Instagram' });
+  }
+
+  function telaPro() {
+    var wrap = el('div', {});
+    wrap.appendChild(el('h2', { id: 'titulo', tabindex: '-1', 'data-foco': '1', text: 'Obrigada pelo seu interesse' }));
+    wrap.appendChild(el('p', { text: 'Este especial recebe só indicações de pacientes e cuidadores, porque ele nasce da experiência de quem vive o dia a dia do Parkinson.' }));
+    wrap.appendChild(el('p', { text: 'Nada do que você marcou foi gravado. Se você também convive com Parkinson, ou cuida de alguém que convive, volte e mude a sua resposta.' }));
+    var voltar = el('button', { type: 'button', class: 'btn sec', id: 'voltar', text: 'Voltar e mudar minha resposta' });
+    voltar.addEventListener('click', function () { mostrar('perfil'); });
+    wrap.appendChild(el('div', { class: 'acoes um' }, [voltar, linkInstagram()]));
+    return wrap;
+  }
+
+  function telaFim() {
+    var wrap = el('div', {});
+    wrap.appendChild(el('h2', { id: 'titulo', tabindex: '-1', 'data-foco': '1', text: 'Recebemos a sua indicação. Obrigada!' }));
+    wrap.appendChild(el('p', { text: 'Cada indicação passa por uma conferência da equipe antes de qualquer publicação. Seus dados pessoais não serão publicados.' }));
+    wrap.appendChild(el('p', { text: 'Siga @tulipamais no Instagram para acompanhar quando o guia for ao ar.' }));
+    var outro = el('button', { type: 'button', class: 'btn principal', id: 'outro', text: 'Quer indicar outro profissional?' });
+    outro.addEventListener('click', function () {
+      var uf = estado.uf, cidade = estado.cidade;
+      estado = vazio(); estado.uf = uf; estado.cidade = cidade;
+      mostrar('perfil');
+    });
+    wrap.appendChild(el('div', { class: 'acoes um' }, [outro, linkInstagram()]));
+    return wrap;
+  }
+
+  /* ===== Navegação ===== */
+  function atualizarProgresso() {
+    var i = PASSOS.indexOf(tela);
+    var box = document.getElementById('progresso');
+    if (i === -1) { box.hidden = true; return; }
+    box.hidden = false;
+    var texto = 'Pergunta ' + (i + 1) + ' de ' + PASSOS.length;
+    document.getElementById('progresso-texto').textContent = texto;
+    var barra = document.getElementById('barra');
+    barra.setAttribute('aria-valuenow', String(i + 1));
+    barra.setAttribute('aria-valuetext', texto);
+    document.getElementById('barra-in').style.width = Math.round(((i + 1) / PASSOS.length) * 100) + '%';
+  }
+
+  function construir(id) {
+    if (id === 'intro') return telaIntro();
+    if (id === 'pro') return telaPro();
+    if (id === 'fim') return telaFim();
+    return moldura(id, DEFS[id]);
+  }
+
+  function mostrar(id, semHistorico) {
+    tela = id;
+    limparNo(area);
+    area.appendChild(construir(id));
+    atualizarProgresso();
+    var i = PASSOS.indexOf(id);
+    document.title = (i === -1 ? '' : 'Pergunta ' + (i + 1) + ' de ' + PASSOS.length + ' · ') + 'Especial Tulipa+ · Me indica um profissional?';
+    try {
+      if (semHistorico) history.replaceState({ tela: id }, '');
+      else history.pushState({ tela: id }, '');
+    } catch (e) { /* ignora */ }
+    window.scrollTo(0, 0);
+    var foco = area.querySelector('[data-foco]');
+    if (foco) foco.focus({ preventScroll: true });
+    salvarRascunho();
+  }
+
+  window.addEventListener('popstate', function (ev) {
+    var t = ev.state && ev.state.tela;
+    if (!t || (PASSOS.indexOf(t) === -1 && ['intro', 'pro', 'fim'].indexOf(t) === -1)) t = 'intro';
+    if (t === 'fim' && !jaEnviou) t = 'intro';
+    if (t === 'pro' && estado.perfil !== PERFIL_PROF) t = 'perfil';
+    mostrar(t, true);
+  });
+
+  /* ===== Envio ===== */
+  function montarEnvio() {
+    return {
+      versao: 1,
+      cid: idDoAparelho(),
+      campo_extra: document.getElementById('campo_extra').value,
+      perfil: estado.perfil,
+      nome: aparado(estado.nome),
+      especialidade: estado.esp,
+      especialidade_outra: estado.esp === 'Outra' ? aparado(estado.espOutra) : '',
+      registro: aparado(estado.registro),
+      uf: estado.uf,
+      cidade: aparado(estado.cidade),
+      atendimento: ATENDIMENTOS.filter(function (a) { return estado.atend.indexOf(a) !== -1; }),
+      online: estado.online,
+      relato: aparado(estado.relato),
+      publicar: estado.publicar || 'Não',
+      contato: aparado(estado.contato),
+      consentimento: estado.consent === true
+    };
+  }
+
+  function enviar(form) {
+    var botao = form.querySelector('#seguir');
+    var voltar = form.querySelector('#voltar');
+    var caixa = form.querySelector('#erro');
+
+    function falha(msg) {
+      enviando = false;
+      botao.disabled = false; voltar.disabled = false;
+      botao.textContent = 'Enviar indicação';
+      form.removeAttribute('aria-busy');
+      caixa.textContent = 'Atenção: ' + msg;
+      caixa.className = 'erro visivel';
+      botao.focus();
+    }
+
+    if (!ENDPOINT_URL || ENDPOINT_URL.indexOf('COLE_AQUI') !== -1) { falha(MSG_NAO_CONFIGURADO); return; }
+
+    enviando = true;
+    botao.disabled = true; voltar.disabled = true;
+    botao.textContent = 'Enviando...';
+    form.setAttribute('aria-busy', 'true');
+    caixa.textContent = ''; caixa.className = 'erro';
+
+    var controle = (typeof AbortController === 'function') ? new AbortController() : null;
+    var relogio = setTimeout(function () { if (controle) controle.abort(); }, 45000);
+
+    fetch(ENDPOINT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // evita o pré-voo CORS que o Apps Script não responde
+      body: JSON.stringify(montarEnvio()),
+      redirect: 'follow',
+      signal: controle ? controle.signal : undefined
+    }).then(function (resp) {
+      return resp.text();
+    }).then(function (texto) {
+      clearTimeout(relogio);
+      var json = null;
+      try { json = JSON.parse(texto); } catch (e) { json = null; }
+      if (json && json.ok === true) {
+        enviando = false; jaEnviou = true;
+        apagarRascunho();
+        mostrar('fim');
+      } else if (json && json.ok === false && typeof json.erro === 'string' && json.erro) {
+        falha(json.erro);
+      } else {
+        falha(MSG_INESPERADA);
+      }
+    }).catch(function () {
+      clearTimeout(relogio);
+      falha(MSG_REDE);
+    });
+  }
+
+  /* ===== Aviso de privacidade ===== */
+  var dlg = document.getElementById('privacidade');
+  var quemAbriu = null;
+  function abrirPrivacidade(origem) {
+    quemAbriu = origem || null;
+    if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); }
+    else dlg.setAttribute('open', '');
+    dlg.querySelector('.dlg-in').scrollTop = 0;
+    document.getElementById('priv-titulo').focus();
+  }
+  function fecharPrivacidade() {
+    if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open');
+  }
+  dlg.addEventListener('close', function () { if (quemAbriu && document.body.contains(quemAbriu)) quemAbriu.focus(); });
+  document.getElementById('fechar-privacidade').addEventListener('click', fecharPrivacidade);
+  document.getElementById('abrir-privacidade-rodape').addEventListener('click', function (ev) { abrirPrivacidade(ev.currentTarget); });
+
+  /* ===== Início ===== */
+  rascunhoSalvo = lerRascunho();
+  mostrar('intro', true);
+})();
+</script>
+</body>
+</html>
